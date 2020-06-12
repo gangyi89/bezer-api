@@ -14,7 +14,11 @@ sam local start-api -n env.json
 with SAM local and dynamoDB docker
 
 1. setup dynamoDB local
-   `docker run --name dynamo -p 8000:8000 amazon/dynamodb-local`
+
+```
+docker run --name dynamo -p 8000:8000 amazon/dynamodb-local
+```
+
 2. setup dynamoDB tables and data
 
 ```
@@ -46,6 +50,8 @@ if (isLocal) {
   });
 }
 ```
+
+# Initial README Info
 
 This project contains source code and supporting files for a serverless application that you can deploy with the AWS Serverless Application Model (AWS SAM) command line interface (CLI). It includes the following files and folders:
 
