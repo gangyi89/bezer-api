@@ -2,9 +2,18 @@
 
 // Get the DynamoDB table name from environment variables
 const tableName = process.env.SAMPLE_TABLE;
+const isLocal = process.env.AWS_SAM_LOCAL;
 
 // Create a DocumentClient that represents the query to add an item
+var AWS = require("aws-sdk");
 const dynamodb = require("aws-sdk/clients/dynamodb");
+
+if (isLocal) {
+  AWS.config.update({
+    endpoint: "http://docker.for.mac.localhost:8000",
+  });
+}
+
 const docClient = new dynamodb.DocumentClient();
 
 /**
@@ -18,6 +27,8 @@ exports.getAllItemsHandler = async (event) => {
   }
   // All log statements are written to CloudWatch
   console.info("received:", event);
+  console.info("hello it is updated");
+  console.info(`table name: ${tableName}`);
 
   // get all items from the table (only first 1MB data, you can use `LastEvaluatedKey` to get the rest of data)
   // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#scan-property
