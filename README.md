@@ -1,5 +1,17 @@
 # Bezer-Api
 
+## Local unit test
+
+1. Update vs code launch.json
+2. Define event for the function in the events folder
+3. Invoke a local instance of the function
+
+```
+sam local invoke -e ./events/event-get-all-items.json --debug-port 5678  getAllItemsFunction -n env.json
+```
+
+4. Run the vs code debugger
+
 ## Run local environment
 
 1. setup env.json to pass table name to environment variable
@@ -16,7 +28,7 @@ with SAM local and dynamoDB docker
 1. setup dynamoDB local
 
 ```
-docker run --name dynamo -p 8000:8000 amazon/dynamodb-local
+docker-compose -f dynamodb.yml up -d
 ```
 
 2. setup dynamoDB tables and data
