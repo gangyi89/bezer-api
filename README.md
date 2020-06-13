@@ -161,7 +161,7 @@ Resources:
   getAllItemsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: src/handlers/get-all-items.getAllItemsHandler
+      Handler: src/handlers/items/get-all-items.getAllItemsHandler
       Runtime: nodejs12.x
       DeadLetterQueue:
         Type: SQS
