@@ -114,6 +114,56 @@ Resources:
             Method: POST
             Auth:
               Authorizer: NONE
+
+  # This is a Lambda function config associated with the source code: put-item.js
+  postProjectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/projects/post-project.postProjectHandler
+      Runtime: nodejs12.x
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP post method to add one project to a DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProjectsTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          SAMPLE_TABLE: !Ref ProjectsTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /projects/
+            Method: POST
+  # This is a Lambda function config associated with the source code: get-all-items.js
+  getAllProjectsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/projects/get-all-projects.getAllProjectsHandler
+      Runtime: nodejs12.x
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP get method to get all items from a DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProjectsTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          SAMPLE_TABLE: !Ref ProjectsTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /projects/
+            Method: GET
+
   # Simple syntax to create a DynamoDB table with a single attribute primary key, more in
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlesssimpletable
 
@@ -121,10 +171,36 @@ Resources:
   SampleTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      TableName: bezer-table-projects
+      TableName: sample-table
       PrimaryKey:
         Name: id
         Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+
+  ProjectsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: bezer-table-projects
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "userId"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+      GlobalSecondaryIndexes:
+        IndexName: "userIdIndex"
+        KeySchema:
+          - AttributeName: "userId"
+            KeyType: "HASH"
+        Projection:
+          - ProjectionType: "ALL"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 2
+          WriteCapacityUnits: 2
       ProvisionedThroughput:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2

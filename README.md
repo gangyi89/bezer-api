@@ -35,7 +35,23 @@ docker-compose -f dynamodb.yml up -d
 
 ```
 //create table
-aws dynamodb create-table --table-name bezer-table-projects --attribute-definitions AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5  --endpoint-url=http://localhost:8000
+aws dynamodb create-table \
+--table-name bezer-table-projects \
+--attribute-definitions AttributeName=id,AttributeType=S AttributeName=userId,AttributeType=S \
+--key-schema AttributeName=id,KeyType=HASH AttributeName=userId,KeyType=RANGE \
+--provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+--endpoint-url=http://localhost:8000
+
+//create table
+aws dynamodb create-table \
+--table-name bezer-table-projects \
+--attribute-definitions AttributeName=id,AttributeType=S AttributeName=userId,AttributeType=S \
+--global-secondary-index \
+    "[{\"IndexName\": \"userIdIndex\",\"KeySchema\":[{\"AttributeName\":\"userId\",\"KeyType\":\"HASH\"}], \
+    \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5      },\"Projection\":{\"ProjectionType\":\"ALL\"}}]" \
+--key-schema AttributeName=id,KeyType=HASH AttributeName=userId,KeyType=RANGE \
+--provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+--endpoint-url=http://localhost:8000
 
 //input item
 aws dynamodb put-item \
@@ -62,6 +78,10 @@ if (isLocal) {
   });
 }
 ```
+
+## Coding Standard
+
+[prettier and eslint](https://dev.to/chgldev/getting-prettier-eslint-and-vscode-to-work-together-3678)
 
 # Initial README Info
 
