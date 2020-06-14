@@ -42,6 +42,7 @@ Resources:
   getAllItemsFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join ["", [!Ref AWS::StackName, "-items-get"]]
       Handler: src/handlers/items/get-all-items.getAllItemsHandler
       Description: A simple example includes a HTTP get method to get all items from a DynamoDB table.
       Policies:
@@ -66,6 +67,7 @@ Resources:
   getByIdFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join ["", [!Ref AWS::StackName, "-items-get-id"]]
       Handler: src/handlers/items/get-by-id.getByIdHandler
       Description: A simple example includes a HTTP get method to get one item by id from a DynamoDB table.
       Policies:
@@ -92,6 +94,7 @@ Resources:
   putItemFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join ["", [!Ref AWS::StackName, "-items-put"]]
       Handler: src/handlers/items/put-item.putItemHandler
       Description: A simple example includes a HTTP post method to add one item to a DynamoDB table.
       Policies:
@@ -116,6 +119,7 @@ Resources:
   postProjectFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join ["", [!Ref AWS::StackName, "-projects-post"]]
       Handler: src/handlers/projects/post-project.postProjectHandler
       Description: A simple example includes a HTTP post method to add one project to a DynamoDB table.
       Policies:
@@ -137,6 +141,7 @@ Resources:
   getAllProjectsFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join ["", [!Ref AWS::StackName, "-projects-get"]]
       Handler: src/handlers/projects/get-all-projects.getAllProjectsHandler
       Description: A simple example includes a HTTP get method to get all items from a DynamoDB table.
       Policies:
@@ -158,6 +163,7 @@ Resources:
   deleteProjectFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join ["", [!Ref AWS::StackName, "-projects-delete"]]
       Handler: src/handlers/projects/delete-project.deleteProjectHandler
       Description: A simple example includes a HTTP post method to add one project to a DynamoDB table.
       Policies:
@@ -195,7 +201,7 @@ Resources:
   SampleTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      TableName: sample-table
+      TableName: !Join ["", [!Ref AWS::StackName, "-sample"]]
       PrimaryKey:
         Name: id
         Type: String
@@ -206,7 +212,7 @@ Resources:
   ProjectsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: bezer-table-projects
+      TableName: !Join ["", [!Ref AWS::StackName, "-projects"]]
       AttributeDefinitions:
         - AttributeName: "id"
           AttributeType: "S"
