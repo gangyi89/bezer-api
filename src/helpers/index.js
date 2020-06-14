@@ -12,3 +12,7 @@ exports.CreateGuid = () => {
   }
   return _p8() + _p8(true) + _p8(true) + _p8();
 };
+
+exports.CreateAccessCode = () => {
+  return Math.floor(Math.random() * 90000) + 10000;
+};

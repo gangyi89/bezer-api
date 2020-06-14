@@ -1,8 +1,5 @@
-# This is the SAM template that represents the architecture of your serverless application
-# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-basics.html
-
 # The AWSTemplateFormatVersion identifies the capabilities of the template
-# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/format-version-structure.html
+
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   bezer-api
@@ -17,6 +14,15 @@ Parameters:
   CognitoUserPoolArn:
     Type: String
     Default: arn:aws:cognito-idp:ap-southeast-1:177085036552:userpool/ap-southeast-1_ME7Urx1e3
+
+#Globals
+Globals:
+  Function:
+    Runtime: nodejs12.x
+    Layers:
+      - !Ref ApiDepLayer
+    MemorySize: 128
+    Timeout: 100
 
 # Resources declares the AWS resources that you want to include in the stack
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
@@ -37,9 +43,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/handlers/items/get-all-items.getAllItemsHandler
-      Runtime: nodejs12.x
-      MemorySize: 128
-      Timeout: 100
       Description: A simple example includes a HTTP get method to get all items from a DynamoDB table.
       Policies:
         # Give Create/Read/Update/Delete Permissions to the SampleTable
@@ -64,9 +67,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/handlers/items/get-by-id.getByIdHandler
-      Runtime: nodejs12.x
-      MemorySize: 128
-      Timeout: 100
       Description: A simple example includes a HTTP get method to get one item by id from a DynamoDB table.
       Policies:
         # Give Create/Read/Update/Delete Permissions to the SampleTable
@@ -93,9 +93,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/handlers/items/put-item.putItemHandler
-      Runtime: nodejs12.x
-      MemorySize: 128
-      Timeout: 100
       Description: A simple example includes a HTTP post method to add one item to a DynamoDB table.
       Policies:
         # Give Create/Read/Update/Delete Permissions to the SampleTable
@@ -120,9 +117,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/handlers/projects/post-project.postProjectHandler
-      Runtime: nodejs12.x
-      MemorySize: 128
-      Timeout: 100
       Description: A simple example includes a HTTP post method to add one project to a DynamoDB table.
       Policies:
         # Give Create/Read/Update/Delete Permissions to the SampleTable
@@ -137,16 +131,13 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref Api
-            Path: /projects/
+            Path: /projects
             Method: POST
   # This is a Lambda function config associated with the source code: get-all-items.js
   getAllProjectsFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/handlers/projects/get-all-projects.getAllProjectsHandler
-      Runtime: nodejs12.x
-      MemorySize: 128
-      Timeout: 100
       Description: A simple example includes a HTTP get method to get all items from a DynamoDB table.
       Policies:
         # Give Create/Read/Update/Delete Permissions to the SampleTable
@@ -161,8 +152,41 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref Api
-            Path: /projects/
+            Path: /projects
             Method: GET
+  # This is a Lambda function config associated with the source code: put-item.js
+  deleteProjectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/projects/delete-project.deleteProjectHandler
+      Description: A simple example includes a HTTP post method to add one project to a DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProjectsTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          SAMPLE_TABLE: !Ref ProjectsTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /projects/{id}
+            Method: DELETE
+
+  #Dependencies via layers
+  ApiDepLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: api-dependencies
+      Description: Dependencies for apis
+      ContentUri: layers/
+      CompatibleRuntimes:
+        - nodejs12.x
+      LicenseInfo: "MIT"
+      RetentionPolicy: Retain
 
   # Simple syntax to create a DynamoDB table with a single attribute primary key, more in
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlesssimpletable
@@ -194,17 +218,17 @@ Resources:
         - AttributeName: "id"
           KeyType: "HASH"
       GlobalSecondaryIndexes:
-        IndexName: "userIdIndex"
-        KeySchema:
-          - AttributeName: "userId"
-            KeyType: "HASH"
-          - AttributeName: "date"
-            KeyType: "RANGE"
-        Projection:
-          - ProjectionType: "ALL"
-        ProvisionedThroughput:
-          ReadCapacityUnits: 2
-          WriteCapacityUnits: 2
+        - IndexName: "userIdIndex"
+          KeySchema:
+            - AttributeName: "userId"
+              KeyType: "HASH"
+            - AttributeName: "date"
+              KeyType: "RANGE"
+          Projection:
+            ProjectionType: "ALL"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 2
+            WriteCapacityUnits: 2
       ProvisionedThroughput:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2

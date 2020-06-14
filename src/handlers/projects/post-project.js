@@ -1,5 +1,5 @@
 const helpers = require("../../helpers");
-const dataAccess = require("../../data/projects");
+const projectRepository = require("../../repositories/projectRepository");
 
 exports.postProjectHandler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -28,9 +28,10 @@ exports.postProjectHandler = async (event) => {
     userId: userId,
     name: name,
     date: date,
+    accessCode: helpers.CreateAccessCode(),
   };
 
-  const result = await dataAccess.add(data);
+  const result = await projectRepository.add(data);
 
   const response = {
     statusCode: 200,

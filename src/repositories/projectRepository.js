@@ -41,6 +41,20 @@ exports.getByUserId = async (userId) => {
     ExpressionAttributeValues: { ":v_userId": userId },
     ScanIndexForward: true,
   };
-  data = await docClient.query(params).promise();
+  const data = await docClient.query(params).promise();
   return data;
+};
+
+exports.delete = async (id, userId) => {
+  var params = {
+    TableName: tableName,
+    Key: {
+      id: id,
+      userId: userId,
+    },
+  };
+
+  const result = await docClient.delete(params).promise();
+
+  return result;
 };

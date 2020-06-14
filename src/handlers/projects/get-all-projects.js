@@ -1,5 +1,5 @@
 const helpers = require("../../helpers");
-const dataAccess = require("../../data/projects");
+const projectRepository = require("../../repositories/projectRepository");
 const tableName = process.env.SAMPLE_TABLE;
 
 exports.getAllProjectsHandler = async (event) => {
@@ -13,7 +13,7 @@ exports.getAllProjectsHandler = async (event) => {
   const userId = decoded.payload.sub;
   const date = new Date().toISOString();
 
-  const data = await dataAccess.getByUserId(userId);
+  const data = await projectRepository.getByUserId(userId);
   const items = data.Items;
 
   const response = {
