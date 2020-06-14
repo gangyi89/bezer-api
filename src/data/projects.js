@@ -39,10 +39,8 @@ exports.getByUserId = async (userId) => {
     IndexName: "userIdIndex",
     KeyConditionExpression: "userId = :v_userId",
     ExpressionAttributeValues: { ":v_userId": userId },
+    ScanIndexForward: true,
   };
   data = await docClient.query(params).promise();
-
-  console.info(`table is ${tableName}`);
-  console.info(data);
   return data;
 };

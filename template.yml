@@ -188,6 +188,8 @@ Resources:
           AttributeType: "S"
         - AttributeName: "userId"
           AttributeType: "S"
+        - AttributeName: "date"
+          AttributeType: "S"
       KeySchema:
         - AttributeName: "id"
           KeyType: "HASH"
@@ -196,6 +198,8 @@ Resources:
         KeySchema:
           - AttributeName: "userId"
             KeyType: "HASH"
+          - AttributeName: "date"
+            KeyType: "RANGE"
         Projection:
           - ProjectionType: "ALL"
         ProvisionedThroughput:

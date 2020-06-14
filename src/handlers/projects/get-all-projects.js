@@ -7,7 +7,6 @@ exports.getAllProjectsHandler = async (event) => {
     throw new Error(`only accept GET method, you tried: ${event.httpMethod}`);
   }
   console.info("received:", event);
-  console.info(`table is ${tableName}`);
 
   const body = JSON.parse(event.body);
   const decoded = helpers.getUserDetail(event.headers.Authorization);
