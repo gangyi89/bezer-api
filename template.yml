@@ -32,9 +32,12 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: Prod
-      Cors: "'*'"
+      Cors:
+        AllowOrigin: "'*'"
+        AllowHeaders: "'Content-Type, Authorization'"
       Auth:
         DefaultAuthorizer: MyCognitoAuthorizer
+        AddDefaultAuthorizerToCorsPreflight: false
         Authorizers:
           MyCognitoAuthorizer:
             UserPoolArn: !Ref CognitoUserPoolArn
