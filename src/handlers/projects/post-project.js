@@ -25,7 +25,7 @@ exports.postProjectHandler = async (event) => {
   const date = new Date().toISOString();
   const key = name.replace(/\s+/g, "");
 
-  var data = {
+  const data = {
     id: helpers.CreateGuid(),
     userId: userId,
     name: name,
@@ -42,7 +42,7 @@ exports.postProjectHandler = async (event) => {
       // "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
     },
     statusCode: 200,
-    body: JSON.stringify(body),
+    body: JSON.stringify(data),
   };
 
   console.info(
