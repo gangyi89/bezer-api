@@ -13,7 +13,6 @@ exports.postProjectHandler = async (event) => {
   const decoded = helpers.getUserDetail(event.headers.Authorization);
   const userId = decoded.payload.sub;
   const name = body.name;
-  const date = new Date().toISOString();
 
   if (name === undefined) {
     const errorResponse = {
@@ -23,10 +22,14 @@ exports.postProjectHandler = async (event) => {
     return errorResponse;
   }
 
+  const date = new Date().toISOString();
+  const key = name.replace(/\s+/g, "");
+
   var data = {
     id: helpers.CreateGuid(),
     userId: userId,
     name: name,
+    key: key,
     date: date,
     accessCode: helpers.CreateAccessCode(),
   };
