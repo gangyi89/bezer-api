@@ -27,8 +27,14 @@ exports.getAll = async () => {
   return data;
 };
 
-exports.getById = async (id) => {
-  var params = { TableName: tableName, Key: { id: id } };
+exports.getById = async (id, userId) => {
+  var params = {
+    TableName: tableName,
+    Key: {
+      id: id,
+      userId: userId,
+    },
+  };
   const data = await docClient.get(params).promise();
   return data;
 };

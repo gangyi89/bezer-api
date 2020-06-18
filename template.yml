@@ -196,6 +196,28 @@ Resources:
             RestApiId: !Ref Api
             Path: /projects/{id}
             Method: DELETE
+  #get by id for projects
+  getProjectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join ["", [!Ref AWS::StackName, "-projects-get-by-id"]]
+      Handler: src/handlers/projects/get-project.getProjectHandler
+      Description: A simple example includes a HTTP post method to add one project to a DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProjectsTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          SAMPLE_TABLE: !Ref ProjectsTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /projects/{id}
+            Method: GET
 
   #Dependencies via layers
   ApiDepLayer:

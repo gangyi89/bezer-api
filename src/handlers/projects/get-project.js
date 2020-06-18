@@ -2,11 +2,9 @@ const helpers = require("../../helpers");
 const projectRepository = require("../../repositories/projectRepository");
 const tableName = process.env.SAMPLE_TABLE;
 
-exports.deleteProjectHandler = async (event) => {
-  if (event.httpMethod !== "DELETE") {
-    throw new Error(
-      `only accept DELETE method, you tried: ${event.httpMethod}`
-    );
+exports.getProjectHandler = async (event) => {
+  if (event.httpMethod !== "GET") {
+    throw new Error(`only accept GET method, you tried: ${event.httpMethod}`);
   }
   console.info("received:", event);
 
@@ -14,13 +12,15 @@ exports.deleteProjectHandler = async (event) => {
   const userId = decoded.payload.sub;
   const id = event.pathParameters.id;
 
-  const result = await projectRepository.delete(id, userId);
+  const data = await projectRepository.getById(id, userId);
+  const item = data.Item;
 
   const response = {
     headers: {
       "Access-Control-Allow-Origin": "*", // Required for CORS support to work
     },
     statusCode: 200,
+    body: JSON.stringify(item),
   };
 
   console.info(

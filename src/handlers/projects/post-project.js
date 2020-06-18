@@ -26,10 +26,9 @@ exports.postProjectHandler = async (event) => {
   const key = name.replace(/\s+/g, "");
 
   const data = {
-    id: helpers.CreateGuid(),
+    id: key,
     userId: userId,
     name: name,
-    key: key,
     date: date,
     accessCode: helpers.CreateAccessCode(),
   };
@@ -39,7 +38,6 @@ exports.postProjectHandler = async (event) => {
   const response = {
     headers: {
       "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-      // "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
     },
     statusCode: 200,
     body: JSON.stringify(data),
