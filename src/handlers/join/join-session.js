@@ -30,13 +30,7 @@ exports.joinSessionHandler = async (event) => {
     return errorResponse;
   }
 
-  const item = data.Item;
   const projectId = data.Items[0].id;
-  console.log(projectId);
-
-  console.info(data);
-
-  //generate a session id
   const id = helpers.CreateGuid();
 
   //store in dynamodb
