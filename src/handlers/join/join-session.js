@@ -14,6 +14,9 @@ exports.joinSessionHandler = async (event) => {
 
   if (body.accessCode === undefined) {
     const errorResponse = {
+      headers: {
+        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+      },
       statusCode: 400,
       body: JSON.stringify({ message: "missing accessCode parameter" }),
     };
@@ -24,6 +27,9 @@ exports.joinSessionHandler = async (event) => {
   const data = await projectRepository.getByAccessCode(accessCode);
   if (data.Count === 0) {
     const errorResponse = {
+      headers: {
+        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+      },
       statusCode: 404,
       body: JSON.stringify({ message: "access code is invalid" }),
     };
