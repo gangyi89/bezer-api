@@ -17,7 +17,7 @@ exports.postProjectHandler = async (event) => {
   if (name === undefined) {
     const errorResponse = {
       statusCode: 401,
-      body: JSON.stringify({ error: "missing name parameter" }),
+      body: JSON.stringify({ message: "missing name parameter" }),
     };
     return errorResponse;
   }

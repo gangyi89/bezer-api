@@ -15,7 +15,7 @@ exports.joinSessionHandler = async (event) => {
   if (body.accessCode === undefined) {
     const errorResponse = {
       statusCode: 400,
-      body: JSON.stringify({ error: "missing accessCode parameter" }),
+      body: JSON.stringify({ message: "missing accessCode parameter" }),
     };
     return errorResponse;
   }
@@ -25,7 +25,7 @@ exports.joinSessionHandler = async (event) => {
   if (data.Count === 0) {
     const errorResponse = {
       statusCode: 404,
-      body: JSON.stringify({ error: "access code is invalid" }),
+      body: JSON.stringify({ message: "access code is invalid" }),
     };
     return errorResponse;
   }
