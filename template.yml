@@ -196,6 +196,35 @@ Resources:
             RestApiId: !Ref Api
             Path: /projects/{id}
             Method: DELETE
+
+  # This is a Lambda function config associated with the source code: get-all-items.js
+  joinSessionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join ["", [!Ref AWS::StackName, "-join-session"]]
+      Handler: src/handlers/join/join-session.joinSessionHandler
+      Description: User can join a session using this api
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProjectsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          SAMPLE_TABLE: !Ref ProjectsTable
+          USERS_TABLE: !Ref UsersTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /join
+            Method: POST
+            Auth:
+              Authorizer: NONE
+
   #get by id for projects
   getProjectFunction:
     Type: AWS::Serverless::Function
@@ -249,13 +278,15 @@ Resources:
   ProjectsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Join ["", [!Ref AWS::StackName, "-projects0.1"]]
+      TableName: !Join ["", [!Ref AWS::StackName, "-projects"]]
       AttributeDefinitions:
         - AttributeName: "id"
           AttributeType: "S"
         - AttributeName: "userId"
           AttributeType: "S"
         - AttributeName: "date"
+          AttributeType: "S"
+        - AttributeName: "accessCode"
           AttributeType: "S"
       KeySchema:
         - AttributeName: "id"
@@ -269,6 +300,43 @@ Resources:
               KeyType: "HASH"
             - AttributeName: "date"
               KeyType: "RANGE"
+          Projection:
+            ProjectionType: "ALL"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 2
+            WriteCapacityUnits: 2
+        - IndexName: "accessCodeIndex"
+          KeySchema:
+            - AttributeName: "accessCode"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "ALL"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 2
+            WriteCapacityUnits: 2
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+  #users table
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Join ["", [!Ref AWS::StackName, "-users"]]
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "accessCode"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+        - AttributeName: "accessCode"
+          KeyType: "RANGE"
+      GlobalSecondaryIndexes:
+        - IndexName: "accessCodeIndex"
+          KeySchema:
+            - AttributeName: "accessCode"
+              KeyType: "HASH"
           Projection:
             ProjectionType: "ALL"
           ProvisionedThroughput:

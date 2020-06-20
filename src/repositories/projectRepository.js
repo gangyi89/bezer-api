@@ -64,3 +64,15 @@ exports.delete = async (id, userId) => {
 
   return result;
 };
+
+exports.getByAccessCode = async (accessCode) => {
+  var params = {
+    TableName: tableName,
+    IndexName: "accessCodeIndex",
+    KeyConditionExpression: "accessCode = :v_accessCode",
+    ExpressionAttributeValues: { ":v_accessCode": accessCode },
+    ScanIndexForward: true,
+  };
+  const data = await docClient.query(params).promise();
+  return data;
+};

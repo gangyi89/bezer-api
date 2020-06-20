@@ -35,23 +35,26 @@ docker-compose -f dynamodb.yml up -d
 
 ```
 //create table
+
 aws dynamodb create-table \
---table-name bezer-table-projects \
---attribute-definitions AttributeName=id,AttributeType=S AttributeName=userId,AttributeType=S AttributeName=date,AttributeType=S \
+--table-name bezer-projects \
+--attribute-definitions AttributeName=id,AttributeType=S AttributeName=userId,AttributeType=S AttributeName=date,AttributeType=S AttributeName=accessCode,AttributeType=S \
 --global-secondary-index \
     "[{\"IndexName\": \"userIdIndex\",\"KeySchema\":[{\"AttributeName\":\"userId\",\"KeyType\":\"HASH\"}, {\"AttributeName\":\"date\",\"KeyType\":\"RANGE\"}], \
-    \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5      },\"Projection\":{\"ProjectionType\":\"ALL\"}}]" \
+    \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5 },\"Projection\":{\"ProjectionType\":\"ALL\"}} ,\
+    {\"IndexName\": \"accessCodeIndex\",\"KeySchema\":[{\"AttributeName\":\"accessCode\",\"KeyType\":\"HASH\"}], \
+    \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5},\"Projection\":{\"ProjectionType\":\"ALL\"}}]" \
 --key-schema AttributeName=id,KeyType=HASH AttributeName=userId,KeyType=RANGE \
 --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
 --endpoint-url=http://localhost:8000
 
 aws dynamodb create-table \
---table-name bezer-table-projects \
---attribute-definitions AttributeName=id,AttributeType=S AttributeName=userId,AttributeType=S AttributeName=date,AttributeType=S \
+--table-name bezer-users \
+--attribute-definitions AttributeName=id,AttributeType=S AttributeName=accessCode,AttributeType=S \
 --global-secondary-index \
-    "[{\"IndexName\": \"userIdIndex\",\"KeySchema\":[{\"AttributeName\":\"userId\",\"KeyType\":\"HASH\"}, {\"AttributeName\":\"date\",\"KeyType\":\"RANGE\"}], \
-    \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5      },\"Projection\":{\"ProjectionType\":\"ALL\"}}]" \
---key-schema AttributeName=id,KeyType=HASH AttributeName=userId,KeyType=RANGE \
+    "[{\"IndexName\": \"accessCodeIndex\",\"KeySchema\":[{\"AttributeName\":\"accessCode\",\"KeyType\":\"HASH\"}], \
+    \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5},\"Projection\":{\"ProjectionType\":\"ALL\"}}]" \
+--key-schema AttributeName=id,KeyType=HASH AttributeName=accessCode,KeyType=RANGE \
 --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
 --endpoint-url=http://localhost:8000
 

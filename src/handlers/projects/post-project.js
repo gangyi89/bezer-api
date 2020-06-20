@@ -30,8 +30,10 @@ exports.postProjectHandler = async (event) => {
     userId: userId,
     name: name,
     date: date,
-    accessCode: helpers.CreateAccessCode(),
+    accessCode: helpers.CreateAccessCode().toString(),
   };
+
+  console.info(data);
 
   const result = await projectRepository.add(data);
 
