@@ -249,6 +249,57 @@ Resources:
             Method: POST
             Auth:
               Authorizer: NONE
+  # This is a Lambda function config associated with the source code: get-all-items.js
+  postProfileFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join ["", [!Ref AWS::StackName, "-post-profile"]]
+      Handler: src/handlers/profile/post-profile.postProfileHandler
+      Description: initialise profile of user
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProfilesTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DemographicsTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          PROFILES_TABLE: !Ref ProfilesTable
+          DEMOGRAPHICS_TABLE: !Ref DemographicsTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /profile
+            Method: POST
+            Auth:
+              Authorizer: NONE
+    # This is a Lambda function config associated with the source code: get-all-items.js
+  getProfileFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join ["", [!Ref AWS::StackName, "-get-profile"]]
+      Handler: src/handlers/profile/get-profile.getProfileHandler
+      Description: get profile of user
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProfilesTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          PROFILES_TABLE: !Ref ProfilesTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /profile
+            Method: GET
+            Auth:
+              Authorizer: NONE
 
   #Dependencies via layers
   ApiDepLayer:
@@ -344,6 +395,28 @@ Resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 2
             WriteCapacityUnits: 2
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+  # table for user profile
+  ProfilesTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: !Join ["", [!Ref AWS::StackName, "-profiles"]]
+      PrimaryKey:
+        Name: id
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+  # table for user profile
+  DemographicsTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: !Join ["", [!Ref AWS::StackName, "-demographics"]]
+      PrimaryKey:
+        Name: id
+        Type: String
       ProvisionedThroughput:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2

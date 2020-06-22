@@ -58,6 +58,20 @@ aws dynamodb create-table \
 --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
 --endpoint-url=http://localhost:8000
 
+aws dynamodb create-table \
+--table-name bezer-profiles \
+--attribute-definitions AttributeName=id,AttributeType=S \
+--key-schema AttributeName=id,KeyType=HASH \
+--provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+--endpoint-url=http://localhost:8000
+
+aws dynamodb create-table \
+--table-name bezer-demographics \
+--attribute-definitions AttributeName=id,AttributeType=S \
+--key-schema AttributeName=id,KeyType=HASH \
+--provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+--endpoint-url=http://localhost:8000
+
 //input item
 aws dynamodb put-item \
     --table-name bezer-table-projects \

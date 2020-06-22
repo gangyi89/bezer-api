@@ -46,14 +46,26 @@
       }
     },
     {
-      "type": "aws-sam",
-      "request": "direct-invoke",
-      "name": "SampleTable",
-      "invokeTarget": {
-        "target": "template",
-        "samTemplatePath": "/Users/gangyi/Documents/bezer/api/.aws-sam/build/template.yaml",
-        "samTemplateResource": "SampleTable"
-      }
+      "type": "node",
+      "request": "attach",
+      "name": "postProfileFunction",
+      "port": 5678,
+      "address": "localhost",
+      "localRoot": "/Users/gangyi/Documents/bezer/api",
+      "remoteRoot": "/var/task",
+      "protocol": "inspector",
+      "stopOnEntry": false
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "getProfileFunction",
+      "port": 5678,
+      "address": "localhost",
+      "localRoot": "/Users/gangyi/Documents/bezer/api",
+      "remoteRoot": "/var/task",
+      "protocol": "inspector",
+      "stopOnEntry": false
     }
   ]
 }
