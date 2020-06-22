@@ -272,7 +272,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref Api
-            Path: /profile
+            Path: /profiles
             Method: POST
             Auth:
               Authorizer: NONE
@@ -296,7 +296,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref Api
-            Path: /profile
+            Path: /profiles/{id}
             Method: GET
             Auth:
               Authorizer: NONE
