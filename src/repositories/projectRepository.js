@@ -27,12 +27,11 @@ exports.getAll = async () => {
   return data;
 };
 
-exports.getById = async (id, userId) => {
+exports.getById = async (id) => {
   var params = {
     TableName: tableName,
     Key: {
       id: id,
-      userId: userId,
     },
   };
   const data = await docClient.get(params).promise();
@@ -51,12 +50,11 @@ exports.getByUserId = async (userId) => {
   return data;
 };
 
-exports.delete = async (id, userId) => {
+exports.delete = async (id) => {
   var params = {
     TableName: tableName,
     Key: {
       id: id,
-      userId: userId,
     },
   };
 

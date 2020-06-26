@@ -44,7 +44,7 @@ aws dynamodb create-table \
     \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5 },\"Projection\":{\"ProjectionType\":\"ALL\"}} ,\
     {\"IndexName\": \"accessCodeIndex\",\"KeySchema\":[{\"AttributeName\":\"accessCode\",\"KeyType\":\"HASH\"}], \
     \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5},\"Projection\":{\"ProjectionType\":\"ALL\"}}]" \
---key-schema AttributeName=id,KeyType=HASH AttributeName=userId,KeyType=RANGE \
+--key-schema AttributeName=id,KeyType=HASH \
 --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
 --endpoint-url=http://localhost:8000
 

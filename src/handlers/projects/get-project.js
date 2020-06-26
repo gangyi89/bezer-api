@@ -8,11 +8,9 @@ exports.getProjectHandler = async (event) => {
   }
   console.info("received:", event);
 
-  const decoded = helpers.getUserDetail(event.headers.Authorization);
-  const userId = decoded.payload.sub;
   const id = event.pathParameters.id;
 
-  const data = await projectRepository.getById(id, userId);
+  const data = await projectRepository.getById(id);
   const item = data.Item;
 
   const response = {

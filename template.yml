@@ -331,7 +331,7 @@ Resources:
   ProjectsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Join ["", [!Ref AWS::StackName, "-projects"]]
+      TableName: !Join ["", [!Ref AWS::StackName, "-projects1"]]
       AttributeDefinitions:
         - AttributeName: "id"
           AttributeType: "S"
