@@ -331,7 +331,7 @@ Resources:
   ProjectsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Join ["", [!Ref AWS::StackName, "-projects1"]]
+      TableName: !Join ["", [!Ref AWS::StackName, "-projects"]]
       AttributeDefinitions:
         - AttributeName: "id"
           AttributeType: "S"
@@ -344,8 +344,6 @@ Resources:
       KeySchema:
         - AttributeName: "id"
           KeyType: "HASH"
-        - AttributeName: "userId"
-          KeyType: "RANGE"
       GlobalSecondaryIndexes:
         - IndexName: "userIdIndex"
           KeySchema:
