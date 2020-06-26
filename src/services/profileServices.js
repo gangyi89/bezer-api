@@ -17,3 +17,7 @@ exports.createProfile = async ({ id, accessCode }) => {
 
   const result = await profileRepository.add({ id, selected });
 };
+
+exports.updateProfile = async (data) => {
+  const result = await profileRepository.add(data);
+};

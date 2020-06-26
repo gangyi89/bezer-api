@@ -1,5 +1,6 @@
 const profileServices = require("../../services/profileServices");
 const httpResponse = require("../../helpers/httpResponse");
+const DomainException = require("../../helpers/DomainException");
 
 exports.postProfileHandler = async (event) => {
   try {
@@ -11,12 +12,18 @@ exports.postProfileHandler = async (event) => {
     console.info("received:", event);
 
     const body = JSON.parse(event.body);
-    const { id, accessCode } = body;
+    const { id, accessCode, selected } = body;
 
     if (id === undefined || accessCode === undefined) {
-      throw new Error("missing a parameter");
+      throw new DomainException("missing a parameter");
     }
 
+    //if selected already populated, just treat as update
+    if (selected !== undefined) {
+      await profileServices.updateProfile({ ...body });
+      return httpResponse("200");
+    }
+    //else create profile by generating the user role
     await profileServices.createProfile({ id, accessCode });
     return httpResponse("200");
   } catch (e) {
