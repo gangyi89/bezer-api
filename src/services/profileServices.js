@@ -15,7 +15,7 @@ exports.createProfile = async ({ id, accessCode }) => {
   //generate demographics
   const selected = await demographicServices.getDemographic(accessCode);
 
-  const result = await profileRepository.add({ id, selected });
+  const result = await profileRepository.add({ id, accessCode, selected });
 };
 
 exports.updateProfile = async (data) => {
