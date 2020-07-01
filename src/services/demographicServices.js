@@ -6,24 +6,24 @@ const newRatio = {
   youngAdult: 2,
   student: 1,
 };
-exports.getDemographic = async (accessCode) => {
-  //check if accessCode exist
-  const data = await demographicRepository.getById(accessCode);
+exports.getDemographic = async (projectId) => {
+  //check if projectId exist
+  const data = await demographicRepository.getById(projectId);
 
   if (data.Count !== undefined) {
     //working with existing demographics
     const { id, ...currentRatio } = data.Item;
     const { selected, updatedRatio } = demographicSelector(currentRatio);
-    const store = { id: accessCode, ...updatedRatio };
+    const store = { id: projectId, ...updatedRatio };
     const result = await demographicRepository.update(store);
     return selected;
   }
 
   //create new ratio
   const { selected, updatedRatio } = demographicSelector(newRatio);
-  const store = { id: accessCode, ...updatedRatio };
+  const store = { id: projectId, ...updatedRatio };
   const result = await demographicRepository.add(store);
-  console.info(`accessCode ${accessCode} is assigned ${selected}`);
+  console.info(`projectId ${projectId} is assigned ${selected}`);
   return selected;
 };
 

@@ -4,7 +4,7 @@ const demographicServices = require("./demographicServices");
 
 const DomainException = require("../helpers/DomainException");
 
-exports.createProfile = async ({ id, accessCode }) => {
+exports.createProfile = async ({ id, projectId }) => {
   //check in profile db if user exist
   const data = await profileRepository.getById(id);
 
@@ -13,9 +13,9 @@ exports.createProfile = async ({ id, accessCode }) => {
   }
 
   //generate demographics
-  const selected = await demographicServices.getDemographic(accessCode);
+  const selected = await demographicServices.getDemographic(projectId);
 
-  const result = await profileRepository.add({ id, accessCode, selected });
+  const result = await profileRepository.add({ id, projectId, selected });
 };
 
 exports.updateProfile = async (data) => {

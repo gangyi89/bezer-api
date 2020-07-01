@@ -12,9 +12,9 @@ exports.postProfileHandler = async (event) => {
     console.info("received:", event);
 
     const body = JSON.parse(event.body);
-    const { id, accessCode, selected } = body;
+    const { id, projectId, selected } = body;
 
-    if (id === undefined || accessCode === undefined) {
+    if (id === undefined || projectId === undefined) {
       throw new DomainException("missing a parameter");
     }
 
@@ -24,7 +24,7 @@ exports.postProfileHandler = async (event) => {
       return httpResponse("200");
     }
     //else create profile by generating the user role
-    await profileServices.createProfile({ id, accessCode });
+    await profileServices.createProfile({ id, projectId });
     return httpResponse("200");
   } catch (e) {
     if (e.name === "DomainException") {
