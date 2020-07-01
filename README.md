@@ -72,6 +72,16 @@ aws dynamodb create-table \
 --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
 --endpoint-url=http://localhost:8000
 
+aws dynamodb create-table \
+--table-name bezer-stages \
+--attribute-definitions AttributeName=id,AttributeType=S AttributeName=projectId,AttributeType=S \
+--global-secondary-index \
+    "[{\"IndexName\": \"projectIdIndex\",\"KeySchema\":[{\"AttributeName\":\"projectId\",\"KeyType\":\"HASH\"}], \
+    \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5},\"Projection\":{\"ProjectionType\":\"ALL\"}}]" \
+--key-schema AttributeName=id,KeyType=HASH AttributeName=projectId,KeyType=RANGE \
+--provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+--endpoint-url=http://localhost:8000
+
 //input item
 aws dynamodb put-item \
     --table-name bezer-table-projects \

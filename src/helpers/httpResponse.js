@@ -6,7 +6,11 @@ module.exports = function (statusCode = 200, message) {
       },
       statusCode,
       body: JSON.stringify(
-        typeof message === "object" ? { ...message } : { message }
+        Array.isArray(message)
+          ? message
+          : typeof message === "object"
+          ? { ...message }
+          : { message }
       ),
     };
   }

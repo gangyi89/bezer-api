@@ -276,7 +276,7 @@ Resources:
             Method: POST
             Auth:
               Authorizer: NONE
-    # This is a Lambda function config associated with the source code: get-all-items.js
+  # This is a Lambda function config associated with the source code: get-all-items.js
   getProfileFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -300,6 +300,52 @@ Resources:
             Method: GET
             Auth:
               Authorizer: NONE
+  # This is a Lambda function config associated with the source code: get-all-items.js
+  postStageFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join ["", [!Ref AWS::StackName, "-post-stage"]]
+      Handler: src/handlers/stages/post-stage.postStageHandler
+
+      Description: admin to create stage
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref StagesTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          STAGES_TABLE: !Ref StagesTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /stages
+            Method: POST
+
+  # This is a Lambda function config associated with the source code: get-all-items.js
+  getAllStagesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join ["", [!Ref AWS::StackName, "-get-all-stages"]]
+      Handler: src/handlers/stages/get-all-stages.getAllStagesHandler
+      Description: retrieve all stages
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref StagesTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          STAGES_TABLE: !Ref StagesTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /stages
+            Method: GET
 
   #Dependencies via layers
   ApiDepLayer:
@@ -415,6 +461,34 @@ Resources:
       PrimaryKey:
         Name: id
         Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+  #stages table
+  StagesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Join ["", [!Ref AWS::StackName, "-stages"]]
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "projectId"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+        - AttributeName: "projectId"
+          KeyType: "RANGE"
+      GlobalSecondaryIndexes:
+        - IndexName: "projectIdIndex"
+          KeySchema:
+            - AttributeName: "projectId"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "ALL"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 2
+            WriteCapacityUnits: 2
       ProvisionedThroughput:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2
