@@ -21,24 +21,24 @@ exports.add = async (data) => {
   return result;
 };
 
-exports.getById = async (id, projectId) => {
+exports.getById = async (id, userId) => {
   var params = {
     TableName: tableName,
     Key: {
       id: id,
-      projectId: projectId,
+      userId: userId,
     },
   };
   const data = await docClient.get(params).promise();
   return data;
 };
 
-exports.delete = async (id, projectId) => {
+exports.delete = async (id, userId) => {
   var params = {
     TableName: tableName,
     Key: {
       id: id,
-      projectId: projectId,
+      userId: userId,
     },
   };
 

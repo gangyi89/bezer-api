@@ -1,7 +1,9 @@
 {
-  "httpMethod": "POST",
-  "body": "{\"projectId\": \"5555\",\"name\": \"name1\", \"description\": \"test\", \"level\": \"2\"}",
+  "httpMethod": "DELETE",
   "headers": {
     "Authorization": "bearer eyJraWQiOiJhK0VjTG4yRVFDTVNrZDhtRUxzcHVCcW1pUklvR1l4ZTQzOUV3NlUwbWZnPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI0YzM4OTliNy1lYzQzLTRhZDgtODcwYS1mYjNiYjU3ODE1NmIiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmFwLXNvdXRoZWFzdC0xLmFtYXpvbmF3cy5jb21cL2FwLXNvdXRoZWFzdC0xX01FN1VyeDFlMyIsInBob25lX251bWJlcl92ZXJpZmllZCI6dHJ1ZSwiY29nbml0bzp1c2VybmFtZSI6Imdhbmd5aTg5QGdtYWlsLmNvbSIsImF1ZCI6Ijc3c3VmcWdwcmVvNXFudnRia2xhb3Z0cnFtIiwiZXZlbnRfaWQiOiJjNDI2MzJjZC04YTA3LTQ4ZWUtODIyYS1iYWMzMzNhY2Q5ODYiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTU5NDY0MjE2NSwicGhvbmVfbnVtYmVyIjoiKzY1OTIyMDkyMDAiLCJleHAiOjE1OTQ2NDU3NjUsImlhdCI6MTU5NDY0MjE2NSwiZW1haWwiOiJnYW5neWk4OUBnbWFpbC5jb20ifQ.AJEHE0btFnV6xU-J-HWPgSkBvA3q2LaOEFUWMNWXgBf4NPDzXpfx_KiejESDVvcmXuoHxE2HqKjIow-fUSR8q-xRHD51xAolLf2TPb4OJY7eZS_S63NToPQhuEHyy6DGodg9In5-xyummly9A9xDs4F1-O4vAUgG35E-FEd8C9vS3KsSs459kN3U8xhVGFoGSrhg7SH8Pqj2u6R1X0LII9PuiDghuX6U8owZ0fL3mT3ZoPZX_4LQiz0Vric9vGuSYYahCZnAsEzpsYp5iSSFib9Qqn2cA3T3Y2KFSmiTO7G6BNhZI0RBOS2Z1oGVgilv6kEvfccD2jSaTjN1t46eJw"
+  },
+  "pathParameters": {
+    "id": "1d1cd2f9-cb4a-b762-3b89-fddb7f195f1f"
   }
 }

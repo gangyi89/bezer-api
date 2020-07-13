@@ -346,6 +346,28 @@ Resources:
             RestApiId: !Ref Api
             Path: /stages
             Method: GET
+  # This is a Lambda function config
+  deleteStageFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join ["", [!Ref AWS::StackName, "-delete-stage"]]
+      Handler: src/handlers/stages/delete-stage.deleteStageHandler
+      Description: delete a stage
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref StagesTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          STAGES_TABLE: !Ref StagesTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /stages/{id}
+            Method: DELETE
 
   #Dependencies via layers
   ApiDepLayer:
@@ -468,16 +490,18 @@ Resources:
   StagesTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Join ["", [!Ref AWS::StackName, "-stages"]]
+      TableName: !Join ["", [!Ref AWS::StackName, "-stages1"]]
       AttributeDefinitions:
         - AttributeName: "id"
           AttributeType: "S"
         - AttributeName: "projectId"
           AttributeType: "S"
+        - AttributeName: "userId"
+          AttributeType: "S"
       KeySchema:
         - AttributeName: "id"
           KeyType: "HASH"
-        - AttributeName: "projectId"
+        - AttributeName: "userId"
           KeyType: "RANGE"
       GlobalSecondaryIndexes:
         - IndexName: "projectIdIndex"

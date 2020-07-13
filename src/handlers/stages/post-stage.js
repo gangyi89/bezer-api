@@ -12,6 +12,9 @@ exports.postStageHandler = async (event) => {
     }
     console.info("received:", event);
 
+    const decoded = helpers.getUserDetail(event.headers.Authorization);
+    const userId = decoded.payload.sub;
+
     const body = JSON.parse(event.body);
     const { projectId, name, description, level, id } = body;
 
@@ -21,6 +24,7 @@ exports.postStageHandler = async (event) => {
 
     const data = {
       id: id || helpers.CreateGuid(),
+      userId: userId,
       name: name,
       projectId: projectId,
       description: description,
