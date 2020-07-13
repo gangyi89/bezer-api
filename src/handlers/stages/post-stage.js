@@ -13,14 +13,15 @@ exports.postStageHandler = async (event) => {
     console.info("received:", event);
 
     const body = JSON.parse(event.body);
-    const { projectId, name, description, level } = body;
+    const { projectId, name, description, level, id } = body;
 
     if (name === undefined || projectId === undefined || level === undefined) {
       throw new DomainException("missing a parameter");
     }
 
     const data = {
-      id: name,
+      id: id || helpers.CreateGuid(),
+      name: name,
       projectId: projectId,
       description: description,
       level: level,

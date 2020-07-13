@@ -108,6 +108,12 @@ if (isLocal) {
 }
 ```
 
+4. Install node modules to layers/nodejs
+
+```
+npm install
+```
+
 ## Coding Standard
 
 [prettier and eslint](https://dev.to/chgldev/getting-prettier-eslint-and-vscode-to-work-together-3678)
